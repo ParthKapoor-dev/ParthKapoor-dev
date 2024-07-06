@@ -6,8 +6,13 @@
 
 I am a passionate Web and App Developer specializing in the **MERN Stack** and **Next.js**. I also develop apps using **React Native** with **Expo**. Currently, I am diving deep into the world of **Cloud Computing** and learning about **AWS**.
 
+
 ### Current Position
-- **Backend App Developer @ Talecto**
+- **Backend Web Developer @Plex (The Product Manager's Club)**
+- **TypeScript Developer @Codemate.AI**
+
+### Work History
+- **Backend App Developer @Talecto**
 - **Open Source Contributor in SSoC'24 (Social Summer of Code)**
 
 ## 🛠️ Technologies & Tools
