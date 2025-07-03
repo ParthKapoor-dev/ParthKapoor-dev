@@ -1,6 +1,11 @@
 name: Waka Readme
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "*" 
   schedule:
     # Runs at 12am IST
     - cron: '30 18 * * *'
