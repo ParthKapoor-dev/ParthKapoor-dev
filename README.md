@@ -3,11 +3,13 @@
 <!--START_SECTION:waka-->
 ![Code Time](http://img.shields.io/badge/Code%20Time-0%20secs-blue)
 
-![Profile Views](http://img.shields.io/badge/Profile%20Views-87-blue)
+![Profile Views](http://img.shields.io/badge/Profile%20Views-89-blue)
 
 **🐱 My GitHub Data** 
 
 > 📦 ? Used in GitHub's Storage 
+ > 
+> 🏆 331 Contributions in the Year 2025
  > 
 > 💼 Opted to Hire
  > 
@@ -71,5 +73,5 @@ Go                       2 repos             █░░░░░░░░░░�
 ![Lines of Code chart](https://raw.githubusercontent.com/ParthKapoor-dev/ParthKapoor-dev/main/assets/bar_graph.png)
 
 
- Last Updated on 03/07/2025 19:23:13 UTC
+ Last Updated on 03/07/2025 19:25:15 UTC
 <!--END_SECTION:waka-->
