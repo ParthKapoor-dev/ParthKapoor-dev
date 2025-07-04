@@ -73,5 +73,5 @@ Shell                    1 repo              ░░░░░░░░░░░�
 ![Lines of Code chart](https://raw.githubusercontent.com/ParthKapoor-dev/ParthKapoor-dev/main/assets/bar_graph.png)
 
 
- Last Updated on 04/07/2025 19:23:55 UTC
+ Last Updated on 04/07/2025 19:25:45 UTC
 <!--END_SECTION:waka-->
