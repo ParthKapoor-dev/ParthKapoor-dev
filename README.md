@@ -73,5 +73,5 @@ Lua                      2 repos             █░░░░░░░░░░�
 ![Lines of Code chart](https://raw.githubusercontent.com/ParthKapoor-dev/ParthKapoor-dev/main/assets/bar_graph.png)
 
 
- Last Updated on 23/07/2025 19:42:15 UTC
+ Last Updated on 23/07/2025 19:44:32 UTC
 <!--END_SECTION:waka-->
