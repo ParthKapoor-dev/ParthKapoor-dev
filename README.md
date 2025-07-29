@@ -9,8 +9,6 @@
 
 > 📦 ? Used in GitHub's Storage 
  > 
-> 🏆 468 Contributions in the Year 2025
- > 
 > 💼 Opted to Hire
  > 
 > 📜 56 Public Repositories 
@@ -73,5 +71,5 @@ Lua                      2 repos             █░░░░░░░░░░�
 ![Lines of Code chart](https://raw.githubusercontent.com/ParthKapoor-dev/ParthKapoor-dev/main/assets/bar_graph.png)
 
 
- Last Updated on 29/07/2025 19:19:27 UTC
+ Last Updated on 29/07/2025 19:21:48 UTC
 <!--END_SECTION:waka-->
