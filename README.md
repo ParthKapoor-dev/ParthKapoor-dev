@@ -1,9 +1,7 @@
 ![OpBento](https://firebasestorage.googleapis.com/v0/b/smartkaksha-fe32c.appspot.com/o/opbento%2Fparthkapoor-dev3db8f.png?alt=media)
 
 <!--START_SECTION:waka-->
-![Code Time](http://img.shields.io/badge/Code%20Time-0%20secs-blue)
-
-![Profile Views](http://img.shields.io/badge/Profile%20Views-2-blue)
+![Profile Views](http://img.shields.io/badge/Profile%20Views-3-blue)
 
 **🐱 My GitHub Data** 
 
@@ -17,45 +15,6 @@
  > 
 > 🔑 0 Private Repositories 
  > 
-**I'm a Night 🦉** 
-
-```text
-🌞 Morning                238 commits         ██░░░░░░░░░░░░░░░░░░░░░░░   07.03 % 
-🌆 Daytime                1336 commits        ██████████░░░░░░░░░░░░░░░   39.44 % 
-🌃 Evening                1197 commits        █████████░░░░░░░░░░░░░░░░   35.34 % 
-🌙 Night                  616 commits         █████░░░░░░░░░░░░░░░░░░░░   18.19 % 
-```
-📅 **I'm Most Productive on Monday** 
-
-```text
-Monday                   682 commits         █████░░░░░░░░░░░░░░░░░░░░   20.14 % 
-Tuesday                  320 commits         ██░░░░░░░░░░░░░░░░░░░░░░░   09.45 % 
-Wednesday                405 commits         ███░░░░░░░░░░░░░░░░░░░░░░   11.96 % 
-Thursday                 415 commits         ███░░░░░░░░░░░░░░░░░░░░░░   12.25 % 
-Friday                   470 commits         ███░░░░░░░░░░░░░░░░░░░░░░   13.88 % 
-Saturday                 592 commits         ████░░░░░░░░░░░░░░░░░░░░░   17.48 % 
-Sunday                   503 commits         ████░░░░░░░░░░░░░░░░░░░░░   14.85 % 
-```
-
-
-📊 **This Week I Spent My Time On** 
-
-```text
-🕑︎ Time Zone: Asia/Kolkata
-
-💬 Programming Languages: 
-No Activity Tracked This Week
-
-🔥 Editors: 
-No Activity Tracked This Week
-
-🐱‍💻 Projects: 
-No Activity Tracked This Week
-
-💻 Operating System: 
-No Activity Tracked This Week
-```
-
 **I Mostly Code in TypeScript** 
 
 ```text
@@ -73,5 +32,5 @@ Lua                      2 repos             █░░░░░░░░░░�
 ![Lines of Code chart](https://raw.githubusercontent.com/ParthKapoor-dev/ParthKapoor-dev/main/assets/bar_graph.png)
 
 
- Last Updated on 02/11/2025 19:34:40 UTC
+ Last Updated on 03/11/2025 18:48:36 UTC
 <!--END_SECTION:waka-->
