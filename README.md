@@ -73,5 +73,5 @@ Go                       3 repos             █░░░░░░░░░░�
 ![Lines of Code chart](https://raw.githubusercontent.com/ParthKapoor-dev/ParthKapoor-dev/main/assets/bar_graph.png)
 
 
- Last Updated on 23/12/2025 19:01:40 UTC
+ Last Updated on 23/12/2025 19:04:32 UTC
 <!--END_SECTION:waka-->
