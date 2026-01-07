@@ -9,7 +9,7 @@
 
 > 📦 ? Used in GitHub's Storage 
  > 
-> 🏆 1 Contributions in the Year 2026
+> 🏆 0 Contributions in the Year 2026
  > 
 > 💼 Opted to Hire
  > 
@@ -67,5 +67,5 @@ No Activity Tracked This Week
 ![Lines of Code chart](https://raw.githubusercontent.com/ParthKapoor-dev/ParthKapoor-dev/main/assets/bar_graph.png)
 
 
- Last Updated on 07/01/2026 19:33:22 UTC
+ Last Updated on 07/01/2026 19:33:43 UTC
 <!--END_SECTION:waka-->
