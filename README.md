@@ -73,5 +73,5 @@ C++                      4 repos             █░░░░░░░░░░�
 ![Lines of Code chart](https://raw.githubusercontent.com/ParthKapoor-dev/ParthKapoor-dev/main/assets/bar_graph.png)
 
 
- Last Updated on 11/01/2026 10:20:55 UTC
+ Last Updated on 11/01/2026 10:23:09 UTC
 <!--END_SECTION:waka-->
