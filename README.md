@@ -13,7 +13,7 @@
  > 
 > 💼 Opted to Hire
  > 
-> 📜 67 Public Repositories 
+> 📜 68 Public Repositories 
  > 
 > 🔑 0 Private Repositories 
  > 
@@ -73,5 +73,5 @@ C++                      4 repos             █░░░░░░░░░░�
 ![Lines of Code chart](https://raw.githubusercontent.com/ParthKapoor-dev/ParthKapoor-dev/main/assets/bar_graph.png)
 
 
- Last Updated on 17/01/2026 06:33:47 UTC
+ Last Updated on 17/01/2026 06:36:14 UTC
 <!--END_SECTION:waka-->
