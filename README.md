@@ -56,14 +56,8 @@ No Activity Tracked This Week
 No Activity Tracked This Week
 ```
 
-**I Mostly Code in TypeScript** 
-
 ```text
-TypeScript               31 repos            ██████████░░░░░░░░░░░░░░░   38.27 % 
-JavaScript               26 repos            ████████░░░░░░░░░░░░░░░░░   32.10 % 
-Python                   5 repos             ██░░░░░░░░░░░░░░░░░░░░░░░   06.17 % 
-Jupyter Notebook         4 repos             █░░░░░░░░░░░░░░░░░░░░░░░░   04.94 % 
-C++                      4 repos             █░░░░░░░░░░░░░░░░░░░░░░░░   04.94 % 
+
 ```
 
 
@@ -73,5 +67,5 @@ C++                      4 repos             █░░░░░░░░░░�
 ![Lines of Code chart](https://raw.githubusercontent.com/ParthKapoor-dev/ParthKapoor-dev/main/assets/bar_graph.png)
 
 
- Last Updated on 26/01/2026 13:02:21 UTC
+ Last Updated on 26/01/2026 13:02:43 UTC
 <!--END_SECTION:waka-->
