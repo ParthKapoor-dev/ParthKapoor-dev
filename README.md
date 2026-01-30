@@ -17,24 +17,24 @@
  > 
 > 🔑 0 Private Repositories 
  > 
-**I'm an Early 🐤** 
+**I'm a Night 🦉** 
 
 ```text
-🌞 Morning                0 commits           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 % 
-🌆 Daytime                0 commits           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 % 
-🌃 Evening                0 commits           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 % 
-🌙 Night                  0 commits           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 % 
+🌞 Morning                261 commits         ██░░░░░░░░░░░░░░░░░░░░░░░   06.74 % 
+🌆 Daytime                1506 commits        ██████████░░░░░░░░░░░░░░░   38.86 % 
+🌃 Evening                1366 commits        █████████░░░░░░░░░░░░░░░░   35.25 % 
+🌙 Night                  742 commits         █████░░░░░░░░░░░░░░░░░░░░   19.15 % 
 ```
 📅 **I'm Most Productive on Monday** 
 
 ```text
-Monday                   0 commits           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 % 
-Tuesday                  0 commits           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 % 
-Wednesday                0 commits           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 % 
-Thursday                 0 commits           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 % 
-Friday                   0 commits           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 % 
-Saturday                 0 commits           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 % 
-Sunday                   0 commits           ░░░░░░░░░░░░░░░░░░░░░░░░░   00.00 % 
+Monday                   781 commits         █████░░░░░░░░░░░░░░░░░░░░   20.15 % 
+Tuesday                  359 commits         ██░░░░░░░░░░░░░░░░░░░░░░░   09.26 % 
+Wednesday                473 commits         ███░░░░░░░░░░░░░░░░░░░░░░   12.21 % 
+Thursday                 490 commits         ███░░░░░░░░░░░░░░░░░░░░░░   12.65 % 
+Friday                   515 commits         ███░░░░░░░░░░░░░░░░░░░░░░   13.29 % 
+Saturday                 635 commits         ████░░░░░░░░░░░░░░░░░░░░░   16.39 % 
+Sunday                   622 commits         ████░░░░░░░░░░░░░░░░░░░░░   16.05 % 
 ```
 
 
@@ -56,8 +56,14 @@ No Activity Tracked This Week
 No Activity Tracked This Week
 ```
 
-```text
+**I Mostly Code in TypeScript** 
 
+```text
+TypeScript               31 repos            ██████████░░░░░░░░░░░░░░░   38.27 % 
+JavaScript               26 repos            ████████░░░░░░░░░░░░░░░░░   32.10 % 
+Python                   5 repos             ██░░░░░░░░░░░░░░░░░░░░░░░   06.17 % 
+Jupyter Notebook         4 repos             █░░░░░░░░░░░░░░░░░░░░░░░░   04.94 % 
+C++                      4 repos             █░░░░░░░░░░░░░░░░░░░░░░░░   04.94 % 
 ```
 
 
@@ -67,5 +73,5 @@ No Activity Tracked This Week
 ![Lines of Code chart](https://raw.githubusercontent.com/ParthKapoor-dev/ParthKapoor-dev/main/assets/bar_graph.png)
 
 
- Last Updated on 30/01/2026 16:11:59 UTC
+ Last Updated on 30/01/2026 16:15:02 UTC
 <!--END_SECTION:waka-->
