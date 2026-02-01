@@ -8,5 +8,13 @@
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.980.0",
+    "dotenv": "^17.2.3",
+    "gifencoder": "^2.0.1",
+    "graphql-request": "^7.4.0",
+    "png-js": "^1.0.0",
+    "puppeteer": "^24.36.1"
   }
 }
