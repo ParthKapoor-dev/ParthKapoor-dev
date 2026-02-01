@@ -1,15 +1,11 @@
-# github.readme
+<div align="center">
+  <img src="https://pub-b9c14ad730c24fb18cd632172a80c31b.r2.dev/github-readme/stats.gif" alt="Parth Kapoor's GitHub Stats" width="800" />
+</div>
 
-To install dependencies:
+<h3 align="center">
+  Welcome to my GitHub profile! 🚀
+</h3>
 
-```bash
-bun install
-```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.2.20. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+<p align="center">
+  I'm a developer passionate about building cool things.
+</p>
