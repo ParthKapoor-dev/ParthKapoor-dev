@@ -12,7 +12,7 @@ const OUTPUT_FILE = 'stats.gif';
 
 async function main() {
     if (!GH_TOKEN) {
-        console.error('Error: GH_TOKEN is required in .env');
+        console.error('Error: GH_TOKEN is not defined in environment variables.');
         process.exit(1);
     }
 
