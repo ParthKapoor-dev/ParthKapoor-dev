@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Stats</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --text-primary: #f0f6fc;
+      --text-secondary: #8b949e;
+      --accent: #58a6ff;
+      --accent-glow: rgba(88, 166, 255, 0.4);
+      --success: #3fb950;
+      --border: #30363d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: transparent; /* Transparent for capturing */
+      font-family: 'Outfit', sans-serif;
+      color: var(--text-primary);
+      width: 800px;
+      height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 780px;
+      height: 380px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      position: relative;
+      box-shadow: 0 0 40px rgba(0,0,0,0.5);
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 2rem;
+    }
+
+    /* Glow effect behind the card */
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      background: linear-gradient(45deg, #ff00cc, #3333ff, #00ffcc);
+      z-index: -1;
+      border-radius: 18px;
+      filter: blur(20px);
+      opacity: 0.3;
+      animation: borderGlow 6s linear infinite;
+    }
+
+    @keyframes borderGlow {
+      0% { opacity: 0.3; }
+      50% { opacity: 0.6; }
+      100% { opacity: 0.3; }
+    }
+
+    .profile-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-right: 1px solid var(--border);
+      padding-right: 2rem;
+    }
+
+    .avatar-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 1rem;
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 3px solid var(--accent);
+      object-fit: cover;
+      box-shadow: 0 0 20px var(--accent-glow);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); box-shadow: 0 0 20px var(--accent-glow); }
+      50% { transform: translateY(-10px); box-shadow: 0 10px 30px var(--accent-glow); }
+      100% { transform: translateY(0px); box-shadow: 0 0 20px var(--accent-glow); }
+    }
+
+    .name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      background: linear-gradient(90deg, #fff, #aaa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .username {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      align-content: center;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    
+    .stat-card:nth-child(1) { animation: slideIn 0.5s ease-out 0.1s backwards; }
+    .stat-card:nth-child(2) { animation: slideIn 0.5s ease-out 0.2s backwards; }
+    .stat-card:nth-child(3) { animation: slideIn 0.5s ease-out 0.3s backwards; }
+    .stat-card:nth-child(4) { animation: slideIn 0.5s ease-out 0.4s backwards; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    /* Animated counters setup using CSS property if supported, else simple ease */
+    /* For simplicity in this static template, we'll rely on Puppeteer capturing the entrance */
+
+    .stat-icon {
+      color: var(--accent);
+    }
+
+    .languages-bar {
+      grid-column: 1 / -1;
+      margin-top: 1rem;
+    }
+
+    .lang-title {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .progress-segment {
+      height: 100%;
+      animation: growWidth 1.5s ease-out backwards;
+    }
+
+    @keyframes growWidth {
+      from { width: 0; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="profile-section">
+      <div class="avatar-container">
+        <img src="{{avatarUrl}}" alt="Profile" class="avatar">
+      </div>
+      <div class="name">{{name}}</div>
+      <div class="username">@{{username}}</div>
+    </div>
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="stat-icon"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+          Total Stars
+        </div>
+        <div class="stat-value">{{totalStars}}</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-label">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="stat-icon"><path d="M11.93 8.5a4.002 4.002 0 0 1-7.86 0H.75a.75.75 0 0 1 0-1.5h3.32a4.002 4.002 0 0 1 7.86 0h3.32a.75.75 0 0 1 0 1.5h-3.32Z"></path></svg>
+          Commits (Year)
+        </div>
+        <div class="stat-value">{{totalCommits}}</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-label">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="stat-icon"><path d="M1.5 5.25a.75.75 0 0 1 .75-.75h11.5a.75.75 0 0 1 0 1.5H2.25a.75.75 0 0 1-.75-.75ZM2.25 7.5a.75.75 0 0 0 0 1.5h11.5a.75.75 0 0 0 0-1.5H2.25Zm0 3.75a.75.75 0 0 0 0 1.5h11.5a.75.75 0 0 0 0-1.5H2.25Z"></path></svg>
+          PRs & Issues
+        </div>
+        <div class="stat-value">{{totalPRsIssues}}</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-label">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="stat-icon"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path></svg>
+          Contributions
+        </div>
+        <div class="stat-value">{{contributions}}</div>
+      </div>
+
+      <div class="languages-bar">
+        <div class="lang-title">Top Languages</div>
+        <div class="progress-bar">
+          {{languageSegments}}
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
