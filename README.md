@@ -3,11 +3,11 @@
 </div>
 
 <div align="center">
-  <a href="https://twitter.com/parthkapoor-dev">
+  <a href="https://twitter.com/parthkapoor_te">
     <img src="https://pub-b9c14ad730c24fb18cd632172a80c31b.r2.dev/github-readme/twitter.png" alt="Twitter" height="40" />
   </a>
   &nbsp;&nbsp;
-  <a href="https://linkedin.com/in/parthkapoor-dev">
+  <a href="https://linkedin.com/in/parthkapoor08">
     <img src="https://pub-b9c14ad730c24fb18cd632172a80c31b.r2.dev/github-readme/linkedin.png" alt="LinkedIn" height="40" />
   </a>
 </div>

@@ -24,11 +24,18 @@ export async function uploadToR2(filePath: string, fileName: string): Promise<st
 
     const fileContent = readFileSync(filePath);
 
+    const ext = path.extname(fileName).toLowerCase();
+    let contentType = 'application/octet-stream';
+    if (ext === '.gif') contentType = 'image/gif';
+    if (ext === '.png') contentType = 'image/png';
+    if (ext === '.jpg' || ext === '.jpeg') contentType = 'image/jpeg';
+
     const command = new PutObjectCommand({
         Bucket: bucketName,
         Key: fileName,
         Body: fileContent,
-        ContentType: 'image/gif',
+        ContentType: contentType,
+        CacheControl: 'no-cache, no-store, must-revalidate',
     });
 
     await S3.send(command);

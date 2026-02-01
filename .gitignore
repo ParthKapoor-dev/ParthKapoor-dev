@@ -1,7 +1,19 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment variables
 .env
 .env.local
+
+# Generated artifacts
+generated/
 stats.gif
+twitter.png
+linkedin.png
 temp_frames/
+
+# Build outputs
 dist/
+
+# System
 .DS_Store

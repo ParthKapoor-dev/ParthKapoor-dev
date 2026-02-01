@@ -3,6 +3,9 @@ name: Update GitHub Stats
 on:
   schedule:
     - cron: '0 */12 * * *' # Every 12 hours
+  push:
+    branches:
+      - main
   workflow_dispatch: # Manual trigger
 
 jobs:
