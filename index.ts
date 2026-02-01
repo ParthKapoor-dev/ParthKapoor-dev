@@ -27,12 +27,25 @@ async function main() {
         await generateStatsGif(stats, templatePath, outputPath);
         console.log(`GIF generated at ${outputPath}`);
 
+        // Generate Badges
+        console.log('Generating badges...');
+        const twitterPath = path.join(process.cwd(), 'twitter.png');
+        const linkedinPath = path.join(process.cwd(), 'linkedin.png');
+
+        await import('./src/renderer').then(r => r.generateBadge('TWITTER / X', '#58a6ff', twitterPath));
+        await import('./src/renderer').then(r => r.generateBadge('LINKEDIN', '#0a66c2', linkedinPath));
+
         // If R2 creds are present, upload
         if (process.env.R2_ACCOUNT_ID) {
             console.log('Uploading to R2...');
-            const publicUrl = await uploadToR2(outputPath, `github-readme/${OUTPUT_FILE}`); // Namespaced in R2
+            const publicUrl = await uploadToR2(outputPath, `github-readme/${OUTPUT_FILE}`);
+            const twitterUrl = await uploadToR2(twitterPath, `github-readme/twitter.png`);
+            const linkedinUrl = await uploadToR2(linkedinPath, `github-readme/linkedin.png`);
+
             console.log('Top Job! Stats uploaded successfully!');
-            console.log('Image URL:', publicUrl);
+            console.log('Stats URL:', publicUrl);
+            console.log('Twitter Badge:', twitterUrl);
+            console.log('LinkedIn Badge:', linkedinUrl);
         } else {
             console.log('R2 credentials not found. Skipping upload. (Run locally succeeded)');
         }
