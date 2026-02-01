@@ -7,9 +7,6 @@ node_modules/
 
 # Generated artifacts
 generated/
-stats.gif
-twitter.png
-linkedin.png
 temp_frames/
 
 # Build outputs
