@@ -22,15 +22,22 @@ async function main() {
         console.log('Stats fetched:', stats);
 
         console.log('Generating GIF...');
+        const generatedDir = path.join(process.cwd(), 'generated');
         const templatePath = path.join(process.cwd(), 'src', 'template.html');
-        const outputPath = path.join(process.cwd(), OUTPUT_FILE);
+        const outputPath = path.join(generatedDir, OUTPUT_FILE);
+
+        // Ensure dir exists
+        if (!require('fs').existsSync(generatedDir)) {
+            require('fs').mkdirSync(generatedDir);
+        }
+
         await generateStatsGif(stats, templatePath, outputPath);
         console.log(`GIF generated at ${outputPath}`);
 
         // Generate Badges
         console.log('Generating badges...');
-        const twitterPath = path.join(process.cwd(), 'twitter.png');
-        const linkedinPath = path.join(process.cwd(), 'linkedin.png');
+        const twitterPath = path.join(generatedDir, 'twitter.png');
+        const linkedinPath = path.join(generatedDir, 'linkedin.png');
 
         await import('./src/renderer').then(r => r.generateBadge('TWITTER / X', '#58a6ff', twitterPath));
         await import('./src/renderer').then(r => r.generateBadge('LINKEDIN', '#0a66c2', linkedinPath));
