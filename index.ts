@@ -1,55 +1,68 @@
-import dotenv from 'dotenv';
+import fs from 'fs';
 import path from 'path';
+import { buildBoards } from './src/boards';
+import { site } from './src/data';
+import { heroSvg } from './src/hero';
+import { renderBoards } from './src/render';
+import { readme } from './src/readme';
 import { fetchUserStats } from './src/stats';
-import { generateStatsGif } from './src/renderer';
+import type { UserStats } from './src/types';
 
-dotenv.config();
-
-const USERNAME = 'parthkapoor-dev';
+// Bun loads .env and .env.local on its own.
 const GH_TOKEN = process.env.GH_TOKEN;
+const ROOT = process.cwd();
+const ASSETS = path.join(ROOT, 'assets');
+const TILES = path.join(ASSETS, 'tiles');
+const WORK = path.join(ROOT, 'generated');
+const CACHE = path.join(WORK, 'stats.json');
 
-async function main() {
+/** `--cached` re-renders from the last fetch, for iterating on the design offline. */
+async function loadStats(): Promise<UserStats> {
+    if (process.argv.includes('--cached') && fs.existsSync(CACHE)) {
+        console.log('Using cached stats from generated/stats.json');
+        return JSON.parse(fs.readFileSync(CACHE, 'utf-8'));
+    }
     if (!GH_TOKEN) {
         console.error('Error: GH_TOKEN is not defined in environment variables.');
         process.exit(1);
     }
-
-    try {
-        console.log(`Fetching stats for ${USERNAME}...`);
-        const stats = await fetchUserStats(USERNAME, GH_TOKEN);
-        console.log('Stats fetched:', stats);
-
-        const statsFile = 'stats.gif';
-        const twitterFile = 'twitter.png';
-        const linkedinFile = 'linkedin.png';
-
-        console.log(`Generating stats assets...`);
-
-        const assetsDir = path.join(process.cwd(), 'assets');
-        // Ensure dir exists
-        if (!require('fs').existsSync(assetsDir)) {
-            require('fs').mkdirSync(assetsDir);
-        }
-
-        const templatePath = path.join(process.cwd(), 'src', 'template.html');
-        const statsPath = path.join(assetsDir, statsFile);
-        const twitterPath = path.join(assetsDir, twitterFile);
-        const linkedinPath = path.join(assetsDir, linkedinFile);
-
-        await generateStatsGif(stats, templatePath, statsPath);
-        console.log(`Stats generated at ${statsPath}`);
-
-        // Generate Badges
-        console.log('Generating badges...');
-        await import('./src/renderer').then(r => r.generateBadge('TWITTER / X', '#58a6ff', twitterPath));
-        await import('./src/renderer').then(r => r.generateBadge('LINKEDIN', '#0a66c2', linkedinPath));
-
-        console.log('All assets generated successfully in assets/ folder.');
-
-    } catch (error) {
-        console.error('An error occurred:', error);
-        process.exit(1);
-    }
+    console.log(`Fetching stats for ${site.handle}...`);
+    const stats = await fetchUserStats(site.handle, GH_TOKEN);
+    fs.mkdirSync(WORK, { recursive: true });
+    fs.writeFileSync(CACHE, JSON.stringify(stats, null, 1));
+    return stats;
 }
 
-main();
+/** "27 sep · 11:00 ist" */
+function syncedAt(date = new Date()): string {
+    const parts = Object.fromEntries(
+        new Intl.DateTimeFormat('en-GB', {
+            timeZone: site.timezone, day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+        }).formatToParts(date).map((p) => [p.type, p.value]),
+    );
+    return `${parts.day} ${parts.month!.toLowerCase().slice(0, 3)} · ${parts.hour}:${parts.minute} ist`;
+}
+
+async function main() {
+    const stats = await loadStats();
+
+    fs.rmSync(TILES, { recursive: true, force: true });
+    fs.mkdirSync(TILES, { recursive: true });
+
+    console.log('Rendering hero...');
+    for (const theme of ['dark', 'light'] as const) {
+        fs.writeFileSync(path.join(ASSETS, `hero-${theme}.svg`), await heroSvg(theme));
+    }
+
+    console.log('Rendering boards...');
+    const boards = buildBoards(stats, syncedAt());
+    const sizes = await renderBoards(boards, TILES, WORK);
+
+    fs.writeFileSync(path.join(ROOT, 'README.md'), readme(boards, sizes));
+    console.log(`Wrote README.md with ${Object.keys(sizes).length} tiles.`);
+}
+
+main().catch((error) => {
+    console.error('An error occurred:', error);
+    process.exit(1);
+});

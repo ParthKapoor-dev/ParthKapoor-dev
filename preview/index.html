@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile Preview</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.8.1/github-markdown-dark.css" id="md-dark">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.8.1/github-markdown-light.css" id="md-light" disabled>
+<style>
+  :root { --bg: #0d1117; --panel: #0d1117; --border: #30363d; --fg: #e6edf3; --muted: #8b949e; --btn: #21262d; --btn-on: #1f6feb; }
+  [data-theme="light"] { --bg: #ffffff; --panel: #ffffff; --border: #d0d7de; --fg: #1f2328; --muted: #656d76; --btn: #f6f8fa; --btn-on: #0969da; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; }
+  .bar { position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; padding: 10px 16px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+  .bar b { font-weight: 600; margin-right: 8px; }
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .seg button { font: inherit; font-size: 12px; color: var(--fg); background: var(--btn); border: 0; padding: 5px 12px; cursor: pointer; }
+  .seg button + button { border-left: 1px solid var(--border); }
+  .seg button[aria-pressed="true"] { background: var(--btn-on); color: #fff; }
+  .hint { color: var(--muted); font-size: 12px; }
+  .page { display: flex; gap: 24px; max-width: 1280px; margin: 24px auto; padding: 0 32px; }
+  .side { width: 296px; flex: none; }
+  .avatar { width: 296px; height: 296px; border-radius: 50%; border: 1px solid var(--border); background: var(--btn) center/cover; }
+  .side h1 { margin: 16px 0 0; font-size: 24px; line-height: 1.25; }
+  .side .login { color: var(--muted); font-size: 20px; font-weight: 300; }
+  .main { flex: 1; min-width: 0; }
+  .readme { border: 1px solid var(--border); border-radius: 6px; padding: 24px; background: var(--panel); }
+  .readme .path { font-size: 12px; color: var(--muted); margin-bottom: 16px; font-family: ui-monospace, SFMono-Regular, monospace; }
+  .markdown-body { background: transparent !important; }
+  /* phone: GitHub stacks the profile and the README gets ~358px */
+  body.phone .page { flex-direction: column; max-width: 390px; padding: 0 16px; margin: 24px auto; border: 1px solid var(--border); border-radius: 24px; padding-top: 16px; padding-bottom: 16px; }
+  body.phone .side { width: auto; display: flex; gap: 12px; align-items: center; }
+  body.phone .avatar { width: 64px; height: 64px; }
+  body.phone .side h1 { margin: 0; font-size: 20px; }
+  body.phone .readme { padding: 16px; }
+  @media (max-width: 1000px) { body:not(.phone) .side { display: none; } body:not(.phone) .page { padding: 0 16px; } }
+</style>
+</head>
+<body>
+<div class="bar">
+  <b>README preview</b>
+  <span class="seg" data-key="theme"><button data-v="dark">dark</button><button data-v="light">light</button></span>
+  <span class="seg" data-key="device"><button data-v="desktop">desktop</button><button data-v="phone">phone</button></span>
+  <span class="seg"><button id="replay">replay hero</button><button id="reload">reload README</button></span>
+  <span class="hint">run <code>bun run dev</code>, then reload</span>
+</div>
+<div class="page">
+  <aside class="side">
+    <div class="avatar" style="background-image:url(https://github.com/parthkapoor-dev.png)"></div>
+    <div><h1>Parth Kapoor</h1><div class="login">ParthKapoor-dev</div></div>
+  </aside>
+  <main class="main">
+    <div class="readme">
+      <div class="path">ParthKapoor-dev / README.md</div>
+      <article class="markdown-body" id="md"></article>
+    </div>
+  </main>
+</div>
+<script>
+  const state = { theme: 'dark', device: 'desktop' };
+  try { Object.assign(state, JSON.parse(localStorage.getItem('readme-preview') || '{}')); } catch {}
+  let source = '';
+
+  // GitHub picks each <picture> source from the viewer's OS colour scheme and
+  // window width. Evaluate those media queries against the simulated state
+  // instead, so both can be toggled here.
+  const matches = (media) =>
+    media.split(' and ').every((q) => {
+      q = q.trim();
+      if (q.includes('prefers-color-scheme')) return q.includes(state.theme);
+      const min = q.match(/min-width:\s*(\d+)px/);
+      if (min) return state.device === 'desktop' && innerWidth >= +min[1];
+      return true;
+    });
+
+  function render() {
+    document.documentElement.dataset.theme = state.theme;
+    document.getElementById('md-dark').disabled = state.theme !== 'dark';
+    document.getElementById('md-light').disabled = state.theme !== 'light';
+    document.body.classList.toggle('phone', state.device === 'phone');
+    for (const seg of document.querySelectorAll('.seg[data-key]'))
+      for (const b of seg.querySelectorAll('button')) b.setAttribute('aria-pressed', state[seg.dataset.key] === b.dataset.v);
+
+    const md = document.getElementById('md');
+    md.innerHTML = source.replace(/<!--[\s\S]*?-->/g, '');
+    for (const pic of md.querySelectorAll('picture')) {
+      const img = pic.querySelector('img');
+      const hit = [...pic.querySelectorAll('source')].find((s) => matches(s.media));
+      if (hit) {
+        img.src = hit.srcset;
+        if (hit.getAttribute('width')) { img.width = +hit.getAttribute('width'); img.height = +hit.getAttribute('height'); }
+      }
+      pic.querySelectorAll('source').forEach((s) => s.remove());
+    }
+    try { localStorage.setItem('readme-preview', JSON.stringify(state)); } catch {}
+  }
+
+  async function load() {
+    source = await (await fetch('/README.md?' + Date.now(), { cache: 'no-store' })).text();
+    render();
+  }
+
+  document.querySelectorAll('.seg[data-key] button').forEach((b) =>
+    b.addEventListener('click', () => { state[b.parentElement.dataset.key] = b.dataset.v; render(); }));
+  document.getElementById('reload').onclick = load;
+  document.getElementById('replay').onclick = render;
+  // Only re-render when the resize crosses GitHub's 1280px breakpoint.
+  let wide = innerWidth >= 1280;
+  addEventListener('resize', () => { if ((innerWidth >= 1280) !== wide) { wide = !wide; render(); } });
+  load();
+</script>
+</body>
+</html>
