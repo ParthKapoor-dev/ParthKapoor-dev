@@ -16,27 +16,28 @@ devport (parthkapoor.me), vendored into `folio/`.
 ## How it works
 1. `src/stats.ts` fetches stats: contribution calendar, streaks, stars per
    repo, languages by bytes (public, non-fork, owned repos).
-2. `src/boards.ts` builds each board as rows of cells. Every row's cell
-   widths sum to 744px (`BOARD_W`) — `readme.ts` throws if not.
+2. `src/boards.ts` builds each board as rows of cells. Every tile has a
+   desktop face (rows fill 744px) and a mobile face (rows fill 280px);
+   `checkBoards` throws if a row doesn't fill its layout. Rows are identical
+   in both layouts because the README breaks rows with `<br>`.
 3. `src/page.ts` is the HTML document: fonts, card CSS, and an in-page
    layout pass that draws chamfered card outlines, the circuit wires between
    cards, and the git graph.
-4. `src/render.ts` renders the page per theme (dark/light) × variant, and
-   slices it into one PNG per cell:
-   - `wire` — the whole cell, wires included; used at ≥1280px, where the
-     tiles sit edge to edge and the circuit reconnects.
-   - `card` — the bare card plus shadow; used on narrow screens.
-5. `src/hero.ts` writes `assets/hero-{dark,light}.svg`: CSS-animated terminal
-   with subset fonts embedded (external fonts cannot load in `<img>`).
-6. `src/readme.ts` writes `README.md` with `<picture>` elements choosing by
-   `prefers-color-scheme` and `min-width: 1280px`.
+4. `src/render.ts` renders the page per layout (desktop 2×, mobile 3×) ×
+   theme (dark/light), and slices it into one PNG per cell, wires included.
+5. `src/hero.ts` writes `assets/hero-{desktop,mobile}-{dark,light}.svg`:
+   CSS-animated terminal with subset fonts embedded (external fonts cannot
+   load in `<img>`).
+6. `src/readme.ts` writes `README.md`; each `<picture>` has three tiers:
+   ≥1280px desktop, ≥768px mobile at 1.5×, else mobile at 1×, each by
+   `prefers-color-scheme`.
 
 ## Gotchas
-- Fallback `<img>` tags carry `width` but no `height`: GitHub applies
+- Mobile tiers carry `width` but no `height`: GitHub applies
   `max-width: 100%` without `height: auto`, so a fixed height squashes.
+- The mobile layout is 280px so a row still fits GitHub's column on a
+  360px phone; below that, rows wrap.
 - No whitespace between tiles in a row, `<br />` between rows.
-- Screenshot clips must stay inside the page (x ≥ 0) or Chrome captures the
-  wrong region.
 - Tile PNGs are regenerated from scratch each run (`assets/tiles` is wiped).
 
 ## Commands
@@ -44,7 +45,7 @@ devport (parthkapoor.me), vendored into `folio/`.
 bun install
 bun run build     # fetch stats (needs GH_TOKEN in .env/.env.local) + render
 bun run dev       # re-render from generated/stats.json, no network
-bun run preview   # http://localhost:4173 — GitHub-like preview with theme/device toggles
+bun run preview   # http://localhost:4173 — GitHub-like preview, theme + desktop/tablet/phone
 ```
 
 ## Key Files

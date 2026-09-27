@@ -3,50 +3,66 @@
  * inline images with no whitespace between them sit edge to edge, and a
  * <br> starts the next row, so the sliced boards reassemble exactly.
  *
- * Each tile is a <picture>: at 1280px and up GitHub's README column fits
- * the 744px board, so it gets the cell with the circuit; below that it gets
- * the bare card, which wraps cleanly on a phone.
+ * Each tile is a <picture> with three tiers:
+ *   ≥1280px  the desktop layout — GitHub's README column fits 744px here.
+ *   ≥768px   the mobile layout at 1.5×, 420px — tablets and narrow windows.
+ *   below    the mobile layout at 1×, 280px — phones.
+ * Rows are identical across tiers, so the <br>s hold everywhere.
  *
- * The <img> fallbacks carry a width but no height: GitHub caps images at
- * max-width: 100% without height: auto, so a fixed height would squash any
- * image a phone shrinks.
+ * Mobile tiers set a width but no height: GitHub caps images at
+ * max-width: 100% without height: auto, so a fixed height would squash an
+ * image on a column narrower than expected.
  */
-import { BOARD_W, type Board } from './boards';
-import { HERO_W } from './hero';
-import type { TileSize } from './render';
-import { tileFile } from './render';
+import { checkBoards, type Board, type Layout } from './boards';
+import { HERO_SIZE } from './hero';
+import { tileFile, type TileSize } from './render';
 import { site } from './data';
+import type { ThemeName } from './theme';
 
 const WIDE = '(min-width: 1280px)';
+const TABLET = '(min-width: 768px)';
+const TABLET_SCALE = 1.5;
+
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
-function tile(id: string, alt: string, href: string | undefined, size: TileSize): string {
-    const src = (variant: 'wire' | 'card', theme: 'dark' | 'light') => `./assets/tiles/${tileFile(id, variant, theme)}`;
-    const picture =
+interface Sources {
+    src: (layout: Layout, theme: ThemeName) => string;
+    size: TileSize;
+    alt: string;
+}
+
+function picture({ src, size, alt }: Sources): string {
+    const tablet = Math.round(size.mobile.width * TABLET_SCALE);
+    return (
         `<picture>` +
-        `<source media="${WIDE} and (prefers-color-scheme: dark)" srcset="${src('wire', 'dark')}" width="${size.wire.width}" height="${size.wire.height}" />` +
-        `<source media="${WIDE} and (prefers-color-scheme: light)" srcset="${src('wire', 'light')}" width="${size.wire.width}" height="${size.wire.height}" />` +
-        `<source media="(prefers-color-scheme: dark)" srcset="${src('card', 'dark')}" />` +
-        `<img src="${src('card', 'light')}" alt="${esc(alt)}" width="${size.card.width}" align="top" />` +
-        `</picture>`;
-    return href ? `<a href="${esc(href)}">${picture}</a>` : picture;
+        `<source media="${WIDE} and (prefers-color-scheme: dark)" srcset="${src('desktop', 'dark')}" width="${size.desktop.width}" height="${size.desktop.height}" />` +
+        `<source media="${WIDE} and (prefers-color-scheme: light)" srcset="${src('desktop', 'light')}" width="${size.desktop.width}" height="${size.desktop.height}" />` +
+        `<source media="${TABLET} and (prefers-color-scheme: dark)" srcset="${src('mobile', 'dark')}" width="${tablet}" />` +
+        `<source media="${TABLET} and (prefers-color-scheme: light)" srcset="${src('mobile', 'light')}" width="${tablet}" />` +
+        `<source media="(prefers-color-scheme: dark)" srcset="${src('mobile', 'dark')}" width="${size.mobile.width}" />` +
+        `<img src="${src('mobile', 'light')}" alt="${esc(alt)}" width="${size.mobile.width}" align="top" />` +
+        `</picture>`
+    );
 }
 
 export function readme(boards: Board[], sizes: Record<string, TileSize>): string {
-    for (const board of boards)
-        for (const row of board.rows) {
-            const width = row.tiles.reduce((sum, t) => sum + t.width, 0);
-            if (width !== BOARD_W) throw new Error(`${board.id}: a row is ${width}px wide, not ${BOARD_W}px`);
-        }
+    checkBoards(boards);
 
-    const hero =
-        `<picture>` +
-        `<source media="(prefers-color-scheme: dark)" srcset="./assets/hero-dark.svg" />` +
-        `<img src="./assets/hero-light.svg" alt="${esc(`${site.name} — ${site.role}`)}" width="${HERO_W}" />` +
-        `</picture>`;
+    const hero = picture({
+        src: (layout, theme) => `./assets/hero-${layout}-${theme}.svg`,
+        size: HERO_SIZE,
+        alt: `${site.name} — ${site.role}`,
+    });
 
     const rows = boards.flatMap((board) =>
-        board.rows.map((row) => row.tiles.map((t) => tile(t.id, t.alt, t.href, sizes[t.id]!)).join('')),
+        board.rows.map((row) =>
+            row.tiles
+                .map((t) => {
+                    const pic = picture({ src: (l, th) => `./assets/tiles/${tileFile(t.id, l, th)}`, size: sizes[t.id]!, alt: t.alt });
+                    return t.href ? `<a href="${esc(t.href)}">${pic}</a>` : pic;
+                })
+                .join(''),
+        ),
     );
 
     return `<!-- Generated by \`bun run index.ts\` from src/ — edit there, not here. -->

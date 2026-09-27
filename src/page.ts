@@ -5,17 +5,13 @@
  * between cards, the git graph — so it lives here rather than in Node.
  */
 import path from 'path';
+import { LAYOUT, type Layout } from './boards';
 import { cssVars, themes, type ThemeName } from './theme';
-
-export type Variant = 'wire' | 'card';
 
 const FOLIO = path.join(import.meta.dir, '..', 'folio');
 const font = (file: string) => `url("file://${path.join(FOLIO, 'fonts', file)}")`;
 
-/** Chamfer on each card's bottom-right corner, in CSS px. */
-export const CHAMFER = 10;
-
-const css = (theme: ThemeName) => `
+const css = (theme: ThemeName, layout: Layout) => `
 @font-face { font-family: "Commit Mono"; src: ${font('CommitMono-VF.woff2')} format("woff2"); font-weight: 200 700; }
 @font-face { font-family: "Geist"; src: ${font('Geist-Regular.woff2')} format("woff2"); font-weight: 400; }
 @font-face { font-family: "Geist"; src: ${font('Geist-Medium.woff2')} format("woff2"); font-weight: 500; }
@@ -24,14 +20,14 @@ const css = (theme: ThemeName) => `
 :root { ${cssVars(themes[theme])} }
 * { box-sizing: border-box; }
 html, body { margin: 0; background: transparent; }
-body { width: 744px; font-family: "Geist", sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+body { width: ${LAYOUT[layout].width}px; font-family: "Geist", sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
 .mono, .rows, .label, .head, .foot, .chips, .k, .kv, .gitlog, .social span, .eof span, .cmdline, .go, .star, .months, .legend {
   font-family: "Commit Mono", monospace; font-feature-settings: "ss01";
 }
 h3, .big .n, .eof b, .who b {
   font-family: "Barlow Semi Condensed", sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 0.01em;
 }
-.board { position: relative; width: 744px; }
+.board { position: relative; }
 .row { display: flex; }
 .cell { position: relative; flex: none; }
 .wires { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 0; shape-rendering: crispEdges; }
@@ -39,7 +35,6 @@ h3, .big .n, .eof b, .who b {
 .wires .signal { fill: none; stroke: var(--accent); stroke-width: 1; }
 .wires .port { fill: var(--ink-3); }
 .wires .joint { fill: var(--wire); }
-body.card-variant .wires { display: none; }
 
 .card { position: absolute; z-index: 1; }
 .card .shape { position: absolute; inset: 0; overflow: visible; filter: drop-shadow(0 6px 9px var(--shadow)); }
@@ -98,7 +93,8 @@ h3 { margin: 0; line-height: 0.95; }
 .heatmap .head b { color: var(--ink); font-weight: 600; }
 .legend { display: inline-flex; align-items: center; gap: 3px; font-size: 9.5px; }
 .legend i { width: 7px; height: 7px; display: inline-block; }
-.months { display: grid; grid-template-columns: repeat(53, 8.5px); font-size: 8.5px; color: var(--ink-3); height: 13px; }
+.heatmap { --pitch: 8.5px; }
+.months { display: grid; font-size: 8.5px; color: var(--ink-3); height: 13px; }
 .months span { white-space: nowrap; }
 .grid { display: flex; gap: 1.5px; }
 .wk { display: flex; flex-direction: column; gap: 1.5px; }
@@ -157,12 +153,72 @@ h3 { margin: 0; line-height: 0.95; }
 .eof .inner { display: flex; align-items: center; gap: 14px; padding: 8px 16px; }
 .eof .mascot { width: 84px; height: 84px; margin: -12px -6px -12px -10px; }
 .eof span { white-space: nowrap; }
+
+/* ==================================================================
+   Mobile faces — the same rows at 280px, denser cards.
+   ================================================================== */
+.m-label .inner { font-size: 10.5px; padding: 0 12px; gap: 7px; }
+.m-shot { height: 52px; margin: 1px 1px 0; border-bottom: 1px solid var(--rule); overflow: hidden; background: var(--sunk); }
+.m-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.m-poster .inner, .m-wide .inner { padding: 0; }
+.m-body { padding: 8px 7px 0; }
+.m-poster h3, .m-compact h3 { font-size: 14.5px; }
+.m-meta { font-family: "Commit Mono", monospace; font-size: 8px; color: var(--ink-3); margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-foot { position: absolute; left: 7px; right: 7px; bottom: 7px; display: flex; justify-content: space-between; align-items: center; font-family: "Commit Mono", monospace; font-size: 8.5px; color: var(--ink-3); }
+.m-foot .star, .m-wide .star { font-size: 8.5px; gap: 3px; }
+.m-foot .go { color: var(--accent); }
+.m-wide .m-shot { height: 50px; }
+.m-wide .title-row h3 { font-size: 14.5px; }
+.m-wide p { font-size: 9px; line-height: 1.4; color: var(--ink-2); margin-top: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.m-compact .inner, .m-index .inner { padding: 8px 7px; }
+.m-index .cmdline { font-size: 8px; color: var(--ink-3); }
+.m-index .cmdline .prompt { color: var(--accent); }
+.m-index .big { position: absolute; left: 7px; right: 7px; bottom: 5px; display: flex; justify-content: space-between; align-items: baseline; }
+.m-index .big .n { font-size: 28px; line-height: 1; }
+.m-index .go { font-family: "Commit Mono", monospace; font-size: 8.5px; color: var(--accent); }
+.m-heatmap { --pitch: 8px; }
+.m-heatmap .inner { padding: 8px; }
+.m-heatmap .head { font-size: 8.5px; margin-bottom: 7px; }
+.m-heatmap .months { font-size: 7.5px; height: 11px; }
+.m-heatmap .grid, .m-heatmap .wk { gap: 2px; }
+.m-heatmap .grid i { width: 6px; height: 6px; }
+.m-streak .inner, .m-list .inner { padding: 8px 7px; }
+.m-list .k, .m-streak .k, .m-now .k { font-size: 7.5px; }
+.m-streak .big { display: flex; align-items: baseline; gap: 5px; margin-top: 6px; }
+.m-streak .flame svg { width: 13px; height: 13px; color: var(--hash); }
+.m-streak .big .n { font-size: 32px; line-height: 0.9; }
+.m-list .k { margin-bottom: 5px; }
+.m-list .kv { font-size: 8.5px; line-height: 1.75; }
+.m-list .kv span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.m-list .kv b { flex: none; padding-left: 4px; }
+.m-list .bar { height: 4px; margin: 5px 0 6px; }
+.m-list .dot { width: 5px; height: 5px; margin-right: 4px; vertical-align: 1px; }
+.m-now .inner { padding: 8px 7px; }
+.m-now .logo { display: block; width: 22px; height: 22px; padding: 3px; margin: 7px 0 7px; }
+.m-now b { display: block; font-family: "Barlow Semi Condensed", sans-serif; font-weight: 600; text-transform: uppercase; font-size: 12.5px; line-height: 1; }
+.m-now span { display: block; font-family: "Commit Mono", monospace; font-size: 8px; color: var(--ink-3); margin-top: 4px; }
+.m-gitlog .inner { padding: 8px 10px 8px 0; }
+.m-gitlog .commit { display: block; height: 37px; padding-left: 30px; font-size: 8.5px; }
+.m-gitlog .commit .node { position: absolute; top: 1px; width: 7px; height: 7px; margin: 0; }
+.m-gitlog .commit.lane0 .node { left: 10px; }
+.m-gitlog .commit.lane1 .node { left: 20px; }
+.m-gitlog .line1 { display: flex; align-items: center; gap: 5px; }
+.m-gitlog .logo { width: 10px; height: 10px; margin: 0; }
+.m-gitlog .ref { font-size: 7.5px; margin-left: 2px; padding: 0 4px; }
+.m-gitlog .date { margin-left: auto; font-size: 8px; padding: 0; }
+.m-gitlog .subject { font-family: "Geist", sans-serif; font-size: 10px; margin-top: 4px; text-overflow: ellipsis; }
+.m-social .inner { padding: 0; }
+.m-social .glyph svg { width: 15px; height: 15px; }
+.m-eof .inner { gap: 8px; padding: 4px 12px; }
+.m-eof .mascot { width: 56px; height: 56px; margin: -8px -4px -8px -8px; }
+.m-eof b { font-size: 15px; }
+.m-eof span { font-size: 8.5px; }
 .eof b { display: block; font-size: 22px; line-height: 1; letter-spacing: 0.08em; }
 .eof span { font-size: 10px; color: var(--ink-3); }
 `;
 
 /** Runs in the page. Serialized with Function#toString, so it must be self-contained. */
-function layout(chamfer: number) {
+function arrange(chamfer: number) {
     const NS = 'http://www.w3.org/2000/svg';
     const el = (name: string, attrs: Record<string, string | number>) => {
         const node = document.createElementNS(NS, name);
@@ -256,15 +312,15 @@ function layout(chamfer: number) {
     (window as any).__laidOut = true;
 }
 
-export function pageHtml(boards: string, theme: ThemeName, variant: Variant): string {
+export function pageHtml(boards: string, theme: ThemeName, layout: Layout): string {
     return `<!doctype html><html><head><meta charset="utf-8"><base href="file://${FOLIO}/">
-<style>${css(theme)}</style></head>
-<body class="${variant}-variant ${theme}-theme">${boards}
+<style>${css(theme, layout)}</style></head>
+<body class="${layout} ${theme}-theme">${boards}
 <script>
 (async () => {
   await document.fonts.ready;
   await Promise.all([...document.images].map((img) => img.decode().catch(() => {})));
-  (${layout.toString()})(${CHAMFER});
+  (${arrange.toString()})(${LAYOUT[layout].chamfer});
 })();
 </script></body></html>`;
 }

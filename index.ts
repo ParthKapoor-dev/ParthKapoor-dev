@@ -50,9 +50,10 @@ async function main() {
     fs.mkdirSync(TILES, { recursive: true });
 
     console.log('Rendering hero...');
-    for (const theme of ['dark', 'light'] as const) {
-        fs.writeFileSync(path.join(ASSETS, `hero-${theme}.svg`), await heroSvg(theme));
-    }
+    for (const file of fs.readdirSync(ASSETS)) if (/^hero-.*\.svg$/.test(file)) fs.rmSync(path.join(ASSETS, file));
+    for (const layout of ['desktop', 'mobile'] as const)
+        for (const theme of ['dark', 'light'] as const)
+            fs.writeFileSync(path.join(ASSETS, `hero-${layout}-${theme}.svg`), await heroSvg(theme, layout));
 
     console.log('Rendering boards...');
     const boards = buildBoards(stats, syncedAt());

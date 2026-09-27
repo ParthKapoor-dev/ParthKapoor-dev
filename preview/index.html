@@ -33,14 +33,19 @@
   body.phone .avatar { width: 64px; height: 64px; }
   body.phone .side h1 { margin: 0; font-size: 20px; }
   body.phone .readme { padding: 16px; }
-  @media (max-width: 1000px) { body:not(.phone) .side { display: none; } body:not(.phone) .page { padding: 0 16px; } }
+  /* tablet: below 1012px GitHub stacks the sidebar above the README */
+  body.tablet .page { flex-direction: column; max-width: 834px; }
+  body.tablet .side { width: auto; display: flex; gap: 16px; align-items: center; }
+  body.tablet .avatar { width: 96px; height: 96px; }
+  body.tablet .side h1 { margin: 0; }
+  @media (max-width: 1000px) { body:not(.phone):not(.tablet) .side { display: none; } body:not(.phone):not(.tablet) .page { padding: 0 16px; } }
 </style>
 </head>
 <body>
 <div class="bar">
   <b>README preview</b>
   <span class="seg" data-key="theme"><button data-v="dark">dark</button><button data-v="light">light</button></span>
-  <span class="seg" data-key="device"><button data-v="desktop">desktop</button><button data-v="phone">phone</button></span>
+  <span class="seg" data-key="device"><button data-v="desktop">desktop</button><button data-v="tablet">tablet</button><button data-v="phone">phone</button></span>
   <span class="seg"><button id="replay">replay hero</button><button id="reload">reload README</button></span>
   <span class="hint">run <code>bun run dev</code>, then reload</span>
 </div>
@@ -60,6 +65,8 @@
   const state = { theme: 'dark', device: 'desktop' };
   try { Object.assign(state, JSON.parse(localStorage.getItem('readme-preview') || '{}')); } catch {}
   let source = '';
+  // The window width GitHub would see on each simulated device.
+  const viewport = () => ({ desktop: innerWidth, tablet: 834, phone: 390 })[state.device];
 
   // GitHub picks each <picture> source from the viewer's OS colour scheme and
   // window width. Evaluate those media queries against the simulated state
@@ -69,7 +76,7 @@
       q = q.trim();
       if (q.includes('prefers-color-scheme')) return q.includes(state.theme);
       const min = q.match(/min-width:\s*(\d+)px/);
-      if (min) return state.device === 'desktop' && innerWidth >= +min[1];
+      if (min) return viewport() >= +min[1];
       return true;
     });
 
@@ -78,6 +85,7 @@
     document.getElementById('md-dark').disabled = state.theme !== 'dark';
     document.getElementById('md-light').disabled = state.theme !== 'light';
     document.body.classList.toggle('phone', state.device === 'phone');
+    document.body.classList.toggle('tablet', state.device === 'tablet');
     for (const seg of document.querySelectorAll('.seg[data-key]'))
       for (const b of seg.querySelectorAll('button')) b.setAttribute('aria-pressed', state[seg.dataset.key] === b.dataset.v);
 
@@ -88,7 +96,11 @@
       const hit = [...pic.querySelectorAll('source')].find((s) => matches(s.media));
       if (hit) {
         img.src = hit.srcset;
-        if (hit.getAttribute('width')) { img.width = +hit.getAttribute('width'); img.height = +hit.getAttribute('height'); }
+        // As in the browser, a source's width/height replace the img's; a
+        // source with a width only leaves the height to the aspect ratio.
+        if (hit.hasAttribute('width')) img.setAttribute('width', hit.getAttribute('width'));
+        if (hit.hasAttribute('height')) img.setAttribute('height', hit.getAttribute('height'));
+        else img.removeAttribute('height');
       }
       pic.querySelectorAll('source').forEach((s) => s.remove());
     }
